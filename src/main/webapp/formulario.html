@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Fundo Imobiliário</title>
+</head>
+<body>
+    <h3>Cadastro de Fundo Imobiliário</h3>
+    <form action="fii" method="POST">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required><br><br>
+
+        <label for="setor">Setor:</label>
+        <input type="text" id="setor" name="setor" required><br><br>
+
+        <label for="preco">Preço:</label>
+        <input type="text" id="preco" name="preco" required><br><br>
+
+        <label for="data_ipo">Data IPO:</label>
+        <input type="date" id="data_ipo" name="data_ipo" required><br><br>
+
+        <input type='hidden' name='acao' value='cadastrar'>
+
+        <input type="submit" value="Cadastrar">
+    </form>
+    
+    <!-- Link para listar os fundos -->
+    <a href="fii">Ver todos os fundos imobiliários cadastrados</a>
+</body>
+</html>
