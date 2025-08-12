@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Controle de FIIs</title>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Acessar o Sistema</h2>
+        <form action="login" method="post">
+            <div class="form-group">
+                <label for="usuario">Usuário:</label>
+                <input type="text" id="usuario" name="usuario" required>
+            </div>
+            <div class="form-group">
+                <label for="senha">Senha:</label>
+                <input type="password" id="senha" name="senha" required>
+            </div>
+            <button type="submit" class="btn">Entrar</button>
+        </form>
+        <div id="error-message" class="error" style="display: none;">Usuário ou senha inválidos.</div>
+    </div>
+</body>
+</html>
