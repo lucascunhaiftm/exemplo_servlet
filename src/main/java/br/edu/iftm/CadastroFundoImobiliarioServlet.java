@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet("/fii")
 public class CadastroFundoImobiliarioServlet extends HttpServlet {
@@ -27,7 +28,9 @@ public class CadastroFundoImobiliarioServlet extends HttpServlet {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection conn = DatabaseConnection.getConnection();
-           //Executa consulta no banco
+            PreparedStatement pstmt = conn
+                    .prepareStatement("SELECT id, nome, setor, preco, data_ipo FROM fundos_imobiliarios");
+            ResultSet rs = pstmt.executeQuery();
 
             out.println("<html><head><title>Lista de Fundos Imobiliários</title></head><body>");
             out.println("<h3>Lista de Fundos Imobiliários</h3>");
@@ -36,7 +39,12 @@ public class CadastroFundoImobiliarioServlet extends HttpServlet {
 
             while (rs.next()) {
                 int id = rs.getInt("id");
-               // Busca os atributos no banco
+                String nome = rs.getString("nome");
+                String setor = rs.getString("setor");
+                double preco = rs.getDouble("preco");
+                java.sql.Date dataIpo = rs.getDate("data_ipo");
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                String dataFormatada = sdf.format(dataIpo);
 
                 out.println("<tr><td>" + id + "</td><td>" + nome + "</td><td>" + setor + "</td><td>" + preco
                         + "</td><td>" + dataFormatada + "</td>");
@@ -67,7 +75,13 @@ public class CadastroFundoImobiliarioServlet extends HttpServlet {
             String idStr = request.getParameter("id");
             if (idStr != null && !idStr.trim().isEmpty()) {
                 try {
-                   //Exclui o fii passado
+                    int id = Integer.parseInt(idStr);
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                    Connection conn = DatabaseConnection.getConnection();
+                    PreparedStatement pstmt = conn.prepareStatement("DELETE FROM fundos_imobiliarios WHERE id = ?");
+                    pstmt.setInt(1, id);
+                    pstmt.executeUpdate();
+                    response.sendRedirect("fii");
                 } catch (SQLException | ClassNotFoundException | NumberFormatException e) {
                     out.println("<div class='error-message'>Erro ao excluir fundo: " + e.getMessage() + "</div>");
                     e.printStackTrace();
@@ -76,7 +90,10 @@ public class CadastroFundoImobiliarioServlet extends HttpServlet {
 
         } else if("cadastrar".equals(acao)) {
 
-           //extrai os campos do request para cadastrar o fii
+            String nome = request.getParameter("nome");
+            String setor = request.getParameter("setor");
+            String precoStr = request.getParameter("preco");
+            String dataIpoStr = request.getParameter("data_ipo");
 
             if (nome == null || nome.trim().isEmpty() || setor == null || setor.trim().isEmpty() ||
                     precoStr == null || precoStr.trim().isEmpty() || dataIpoStr == null
@@ -103,7 +120,16 @@ public class CadastroFundoImobiliarioServlet extends HttpServlet {
             }
 
             try {
-                // busca a conexão, monta a consulta e executa no banco. 
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(
+                        "INSERT INTO fundos_imobiliarios (nome, setor, preco, data_ipo) VALUES (?, ?, ?, ?)");
+                pstmt.setString(1, nome);
+                pstmt.setString(2, setor);
+                pstmt.setDouble(3, preco);
+                pstmt.setDate(4, new java.sql.Date(dataIpo.getTime()));
+                pstmt.executeUpdate();
+                response.sendRedirect("fii");
             } catch (SQLException | ClassNotFoundException e) {
                 out.println("<div class='error-message'>Erro ao cadastrar fundo: " + e.getMessage() + "</div>");
                 e.printStackTrace();
