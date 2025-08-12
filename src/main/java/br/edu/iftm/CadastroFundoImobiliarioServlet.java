@@ -20,8 +20,26 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/fii")
 public class CadastroFundoImobiliarioServlet extends HttpServlet {
 
+    /**
+     * Verifica se o usuário tem uma sessão ativa. Se não tiver, redireciona para a página de login.
+     */
+    private boolean verificarAutenticacao(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession(false); 
+
+        if (session == null || session.getAttribute("usuarioLogado") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.html");
+            return false;
+        }
+        return true;
+    }
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        if (!verificarAutenticacao(request, response)) {
+            return;
+        }
+
         response.setContentType("text/html; charset=UTF-8");
         PrintWriter out = response.getWriter();
 
@@ -67,6 +85,11 @@ public class CadastroFundoImobiliarioServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        if (!verificarAutenticacao(request, response)) {
+            return;
+        }
+        
         response.setContentType("text/html; charset=UTF-8");
         PrintWriter out = response.getWriter();
 
