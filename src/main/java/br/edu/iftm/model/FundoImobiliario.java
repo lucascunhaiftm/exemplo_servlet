@@ -1,4 +1,4 @@
-package br.edu.iftm;
+package br.edu.iftm.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
