@@ -18,3 +18,5 @@ bin/
 # Others
 .DS_Store
 *.log
+target/meuservlet.war
+target/meuservlet/WEB-INF/web.xml
