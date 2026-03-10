@@ -1,0 +1,20 @@
+# Java/Maven/Gradle Build Files
+target/
+build/
+bin/
+*.class
+
+# Package Files
+*.jar
+*.war
+*.ear
+
+# VS Code Specific
+.vscode/
+.settings/
+.project
+.metadata/
+
+# Others
+.DS_Store
+*.log
